@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Denetic ENSO | Automatización Industrial · Motion Control · Digitalización</title>
+  <meta name="description" content="Ingeniería especializada en automatización industrial, motion control, SCADA, PLC, IIoT y digitalización. Más de 25 años resolviendo problemas reales de planta. Habla con un ingeniero.">
+  <meta name="keywords" content="automatización industrial, programación PLC, SCADA, motion control, Siemens, Schneider Electric, STEP 7, S7-300, S7-200, IIoT, digitalización industrial, retrofit maquinaria">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Denetic ENSO | Automatización industrial que funciona">
+  <meta property="og:description" content="Motion control, automatización, digitalización e IIoT. Ingeniería especializada con más de 25 años en planta.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo-denetic.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       RESET & VARIABLES
+       Paleta: fondo blanco + azul Denetic (#2D2E83) + verde Denetic (#43B649)
+    ========================================================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f7fa;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+
+      --blue: #2D2E83;
+      --blue-light: #3a3b99;
+      --blue-soft: rgba(45, 46, 131, 0.06);
+      --blue-softer: rgba(45, 46, 131, 0.03);
+
+      --green: #43B649;
+      --green-dim: #3AA540;
+      --green-soft: rgba(67, 182, 73, 0.1);
+      --green-softer: rgba(67, 182, 73, 0.05);
+
+      --text-primary: #1a1a2e;
+      --text-secondary: #555770;
+      --text-muted: #8b8da3;
+      --border: #e5e7ef;
+      --border-light: #d1d5e0;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --section-padding: clamp(4rem, 8vw, 7rem);
+      --container-max: 1200px;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 500;
+    }
+    .section-label::before {
+      content: '';
+      width: 2rem;
+      height: 2px;
+      background: var(--green);
+      border-radius: 1px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.75rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      color: var(--blue);
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* Animaciones */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-stagger > * {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.12s; }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.19s; }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.26s; }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.33s; }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.40s; }
+    .reveal-stagger.visible > * { opacity: 1; transform: translateY(0); }
+
+    /* ==========================================================================
+       BOTONES
+    ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 50px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(67, 182, 73, 0.25);
+    }
+    .btn-primary:hover {
+      background: var(--green-dim);
+      box-shadow: 0 6px 20px rgba(67, 182, 73, 0.35);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--border-light);
+    }
+    .btn-secondary:hover {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      transform: translateY(-2px);
+    }
+    .btn svg {
+      width: 18px; height: 18px;
+      transition: transform 0.3s ease;
+    }
+    .btn:hover svg { transform: translateX(3px); }
+
+    /* ==========================================================================
+       NAVBAR
+    ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0.75rem 0;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+    .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0;
+      box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+    }
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .navbar-brand img { height: 30px; width: auto; }
+    .navbar-divider { width: 1px; height: 1.25rem; background: var(--border-light); }
+    .navbar-tagline {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .navbar-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+    .navbar-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--green);
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+    .navbar-links a:hover { color: var(--blue); }
+    .navbar-links a:hover::after { width: 100%; }
+    .navbar-cta { padding: 0.55rem 1.25rem !important; font-size: 0.85rem !important; }
+    .navbar-cta::after { display: none !important; }
+
+    .navbar-toggle {
+      display: none;
+      background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 1001;
+    }
+    .navbar-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--blue); margin: 5px 0;
+      transition: all 0.3s ease; border-radius: 2px;
+    }
+    .navbar-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .navbar-toggle.active span:nth-child(2) { opacity: 0; }
+    .navbar-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* ==========================================================================
+       HERO — Layout dividido: texto izquierda + imagen derecha
+       Fondo azul Denetic para impacto visual.
+    ========================================================================== */
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 60% at 30% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 60% at 30% 50%, black 20%, transparent 70%);
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 7rem 0 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content { max-width: 560px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 500;
+      margin-bottom: 1.75rem;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+    .hero h1 .highlight { color: var(--green); }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .hero .btn-secondary {
+      border-color: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+    .hero .btn-secondary:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .hero-stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--green);
+      font-family: var(--font-mono);
+    }
+    .hero-stat-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.2rem;
+    }
+
+    /* Imagen del hero — collage de dos fotos con marco */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-img-main {
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 2;
+    }
+    .hero-img-main img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Imagen secundaria flotante — da profundidad */
+    .hero-img-float {
+      position: absolute;
+      bottom: -30px;
+      left: -40px;
+      width: 200px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      border: 3px solid rgba(255,255,255,0.15);
+      z-index: 3;
+    }
+    .hero-img-float img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Badge de experiencia sobre la imagen */
+    .hero-img-badge {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      background: var(--green);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-align: center;
+      line-height: 1.3;
+      z-index: 4;
+      box-shadow: 0 8px 20px rgba(67, 182, 73, 0.3);
+    }
+    .hero-img-badge strong {
+      display: block;
+      font-size: 1.5rem;
+    }
+
+    /* ==========================================================================
+       BANNER — Imagen full-width entre hero y servicios
+    ========================================================================== */
+    .image-divider {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      position: relative;
+    }
+    .image-divider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+    }
+    .image-divider::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--bg-primary) 0%, transparent 15%, transparent 85%, var(--bg-primary) 100%);
+    }
+
+    /* ==========================================================================
+       SERVICIOS
+    ========================================================================== */
+    .services {
+      padding: var(--section-padding) 0;
+      background: var(--bg-primary);
+    }
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .services-header .section-label { justify-content: center; }
+    .services-header .section-subtitle { margin: 0 auto; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .service-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(45, 46, 131, 0.08);
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    /* Motion Control — card destacada */
+    .service-card.featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+      border-color: var(--green);
+      overflow: hidden;
+    }
+    .service-card.featured.no-image {
+      grid-template-columns: 1fr;
+    }
+    .service-card.featured::before {
+      transform: scaleX(1);
+      height: 3px;
+      background: var(--green);
+    }
+    .featured-content {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-image {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+    }
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .service-card.featured .service-icon {
+      background: var(--green);
+      width: 52px; height: 52px;
+    }
+    .service-card.featured .service-icon svg {
+      width: 26px; height: 26px; stroke: #fff;
+    }
+    .service-card.featured h3 { font-size: 1.3rem; }
+    .featured-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--green);
+      background: var(--green-soft);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      background: var(--blue-soft);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    .service-card:hover .service-icon { background: var(--blue); }
+    .service-card:hover .service-icon svg { stroke: #fff; }
+    .service-icon svg {
+      width: 24px; height: 24px;
+      stroke: var(--blue); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      transition: stroke 0.3s ease;
+    }
+    .service-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--blue);
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+    .service-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem;
+    }
+    .service-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: var(--bg-secondary);
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+    }
+
+    /* ==========================================================================
+       DIFERENCIAL — POR QUÉ ELEGIRNOS
+    ========================================================================== */
+    .why-us {
+      padding: var(--section-padding) 0;
+      background: var(--bg-secondary);
+    }
+    .why-us-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .why-us-left { position: sticky; top: 6rem; }
+    .why-us-left p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+    .why-us-quote {
+      padding: 1.25rem 1.5rem;
+      border-left: 3px solid var(--green);
+      background: var(--green-softer);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .why-us-grid { display: grid; gap: 1rem; }
+
+    .why-us-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+    .why-us-item:hover {
+      border-color: var(--border-light);
+      box-shadow: 0 4px 16px rgba(45,46,131,0.06);
+    }
+    .why-us-number {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #fff;
+      background: var(--blue);
+      min-width: 36px; height: 36px;
+      display: flex;
+      align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+    .why-us-item h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--blue); }
+    .why-us-item p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ==========================================================================
+       PARTNERS / TECNOLOGÍA
+    ========================================================================== */
+    .partners {
+      padding: var(--section-padding) 0;
+      background: var(--bg-primary);
+    }
+    .partners-header { text-align: center; margin-bottom: 3rem; }
+    .partners-header .section-label { justify-content: center; }
+    .partners-header .section-subtitle { margin: 0 auto; }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .partner-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      transition: all 0.3s ease;
+    }
+    .partner-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(45,46,131,0.08);
+    }
+    .partner-card-header {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .partner-icon {
+      width: 52px; height: 52px;
+      background: var(--blue);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .partner-icon svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 1.5; }
+    .partner-name { font-size: 1.2rem; font-weight: 700; color: var(--blue); }
+    .partner-subtitle { font-size: 0.8rem; color: var(--green); font-family: var(--font-mono); margin-top: 0.15rem; }
+
+    .partner-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; }
+    .partner-techs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .partner-tech {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--blue);
+      background: var(--blue-soft);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      border: 1px solid rgba(45,46,131,0.1);
+    }
+
+    /* ==========================================================================
+       SOBRE NOSOTROS — con imagen
+    ========================================================================== */
+    .about {
+      padding: var(--section-padding) 0;
+      background: var(--bg-secondary);
+    }
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      line-height: 1.7;
+    }
+    .about-text p strong { color: var(--blue); }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Imagen principal de la sección About */
+    .about-image {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(45,46,131,0.08);
+    }
+    .about-image img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .about-value {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .about-value-icon {
+      width: 36px; height: 36px; min-width: 36px;
+      background: var(--green-soft);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .about-value h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.15rem; color: var(--blue); }
+    .about-value p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0 !important; }
+
+    /* ==========================================================================
+       TALENTO — con imagen de fondo
+    ========================================================================== */
+    .talent {
+      padding: calc(var(--section-padding) * 0.75) 0;
+      background: var(--bg-primary);
+    }
+    .talent-banner {
+      background: var(--blue);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 240px;
+    }
+    .talent-banner--simple {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .talent-banner--simple .talent-content {
+      align-items: center;
+    }
+    .talent-content {
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff;
+    }
+    .talent-content h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .talent-content p { color: rgba(255,255,255,0.75); max-width: 400px; line-height: 1.6; margin-bottom: 1.5rem; }
+    .talent-content .btn-secondary {
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+      align-self: flex-start;
+    }
+    .talent-content .btn-secondary:hover {
+      border-color: var(--green);
+      background: rgba(255,255,255,0.08);
+      color: var(--green);
+    }
+    .talent-image {
+      width: 100%; height: 100%;
+    }
+    .talent-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      min-height: 240px;
+    }
+
+    /* ==========================================================================
+       CONTACTO
+    ========================================================================== */
+    .contact {
+      padding: var(--section-padding) 0;
+      background: var(--bg-secondary);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info { padding-top: 1rem; }
+    .contact-info > p {
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+    .contact-methods { display: flex; flex-direction: column; gap: 1.25rem; }
+    .contact-method {
+      display: flex; align-items: flex-start; gap: 1rem;
+      color: var(--text-secondary); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .contact-method:hover { color: var(--blue); }
+    .contact-method-icon {
+      width: 44px; height: 44px;
+      background: var(--blue-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-method-icon svg { width: 20px; height: 20px; stroke: var(--blue); fill: none; stroke-width: 1.5; }
+    .contact-method-text { font-size: 0.9rem; }
+    .contact-method-label {
+      font-size: 0.7rem; font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-form-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: 0 4px 24px rgba(45,46,131,0.04);
+    }
+    .contact-form-wrapper h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--blue); }
+    .contact-form-wrapper > p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.75rem; }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; font-size: 0.8rem; font-weight: 500;
+      color: var(--text-secondary); margin-bottom: 0.4rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 0.75rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-soft);
+    }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-group select {
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23555770' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-submit { width: 100%; justify-content: center; margin-top: 0.5rem; }
+
+    /* ==========================================================================
+       FOOTER
+    ========================================================================== */
+    .footer {
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--border);
+      background: var(--blue);
+      color: rgba(255,255,255,0.7);
+    }
+    .footer .container {
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 0.5rem; }
+    .footer-brand img { height: 22px; width: auto; filter: brightness(0) invert(1); }
+    .footer-copy { font-size: 0.8rem; }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none; font-size: 0.8rem;
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover { color: var(--green); }
+
+    /* ==========================================================================
+       RESPONSIVE — TABLET
+    ========================================================================== */
+    @media (max-width: 968px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 7rem 0 3rem;
+      }
+      .hero-content { max-width: 100%; }
+      .hero-visual { max-width: 500px; margin: 0 auto; }
+      .hero-img-float { left: -20px; bottom: -20px; width: 160px; }
+      .hero-img-float img { height: 120px; }
+
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .service-card.featured {
+        grid-column: span 2;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .why-us-layout,
+      .about-layout,
+      .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .why-us-left { position: static; }
+
+      .talent-banner {
+        grid-template-columns: 1fr;
+      }
+      .talent-content { padding: 2rem; text-align: center; align-items: center; }
+
+      .partners-grid { grid-template-columns: 1fr 1fr; }
+
+      .image-divider { height: 200px; }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE — MOBILE
+    ========================================================================== */
+    @media (max-width: 768px) {
+      .container { padding: 0 1rem; }
+
+      .navbar-links {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 999;
+      }
+      .navbar-links.active { display: flex; }
+      .navbar-links a { font-size: 1.25rem; color: var(--blue); }
+      .navbar-links .navbar-cta { font-size: 1rem !important; padding: 0.75rem 1.5rem !important; }
+      .navbar-toggle { display: block; }
+      .navbar-tagline, .navbar-divider { display: none; }
+
+      .hero-layout { padding: 6rem 0 2.5rem; gap: 2rem; }
+      .hero h1 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+      .hero-badge { font-size: 0.7rem; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .hero-stat { min-width: calc(50% - 0.75rem); }
+      .hero-img-main img { height: 280px; }
+      .hero-img-float { display: none; }
+      .hero-img-badge { top: -12px; right: -8px; font-size: 0.65rem; padding: 0.5rem 0.75rem; }
+      .hero-img-badge strong { font-size: 1.2rem; }
+
+      .image-divider { height: 160px; }
+
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+      .featured-image { height: 200px; min-height: 200px; }
+      .featured-image img { height: 200px; }
+      .services-header { text-align: left; }
+      .services-header .section-label { justify-content: flex-start; }
+
+      .partners-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .partner-card { padding: 1.75rem 1.5rem; }
+
+      .about-values-grid { grid-template-columns: 1fr; }
+      .about-image img { height: 220px; }
+
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-wrapper { padding: 1.75rem; }
+
+      .footer .container { flex-direction: column; text-align: center; gap: 0.75rem; }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE — SMALL MOBILE
+    ========================================================================== */
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+      .hero-stats { flex-direction: column; gap: 1rem; }
+      .hero-stat {
+        min-width: 100%;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 0.75rem;
+      }
+      .why-us-item { padding: 1.25rem; flex-direction: column; gap: 0.75rem; }
+      .section-title { font-size: clamp(1.4rem, 5vw, 1.75rem); }
+      .btn { padding: 0.75rem 1.25rem; font-size: 0.9rem; }
+      .talent-content { padding: 1.5rem; }
+    }
+
+    @media (hover: none) {
+      .service-card:hover, .partner-card:hover, .why-us-item:hover { transform: none; box-shadow: none; }
+      .btn:hover { transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="navbar-brand">
+        <img src="logo-denetic.png" alt="Denetic" loading="eager">
+        <div class="navbar-divider"></div>
+        <div class="navbar-tagline">ENSO</div>
+      </a>
+      <button class="navbar-toggle" id="navToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#diferencial">Por qué ENSO</a></li>
+        <li><a href="#tecnologia">Tecnología</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#contacto" class="btn btn-primary navbar-cta">Hablar con un ingeniero</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- =====================================================================
+       HERO — Texto izquierda + composición de imágenes derecha
+  ====================================================================== -->
+  <section class="hero" id="inicio">
+    <div class="container">
+      <div class="hero-layout">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Especialistas en automatización industrial
+          </div>
+
+          <h1>
+            Tu máquina no necesita más reuniones.<br>
+            Necesita <span class="highlight">ingeniería que funcione.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Motion control, automatización, SCADA y digitalización industrial con un objetivo:
+            que tu planta produzca más, pare menos y esté preparada para lo que viene.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contacto" class="btn btn-primary">
+              Hablar con un ingeniero
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#servicios" class="btn btn-secondary">Ver qué hacemos</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">+25</span>
+              <span class="hero-stat-label">Años en planta</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">+500</span>
+              <span class="hero-stat-label">Proyectos industriales</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">24/7</span>
+              <span class="hero-stat-label">Soporte técnico</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composición de imágenes -->
+        <div class="hero-visual">
+          <div class="hero-img-main">
+            <img src="img/factory-robots.jpg" alt="Línea de producción automatizada con robots industriales" loading="eager">
+          </div>
+          <div class="hero-img-float">
+            <img src="img/control-panel-detail.jpg" alt="Interior de cuadro eléctrico industrial" loading="eager">
+          </div>
+          <div class="hero-img-badge">
+            <strong>+25</strong>
+            años
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER — Imagen full-width de panel de control -->
+  <div class="image-divider">
+    <img src="img/control-buttons.jpg" alt="Panel de control de máquina industrial" loading="lazy">
+  </div>
+
+  <!-- =====================================================================
+       SERVICIOS
+  ====================================================================== -->
+  <section class="services" id="servicios">
+    <div class="container">
+      <div class="services-header reveal">
+        <div class="section-label">Qué hacemos</div>
+        <h2 class="section-title">Automatización industrial de verdad.<br>Desde el diseño hasta la puesta en marcha.</h2>
+        <p class="section-subtitle">
+          Desde la programación del PLC hasta la puesta en marcha.
+          Nos manchamos las manos para que tu producción no se detenga.
+        </p>
+      </div>
+
+      <div class="services-grid reveal-stagger">
+
+        <!-- DESTACADO: Motion Control -->
+        <div class="service-card featured no-image">
+          <div class="featured-content">
+            <span class="featured-badge">Especialidad core</span>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+            </div>
+            <h3>Motion Control</h3>
+            <p>
+              Control de movimiento de alta precisión para máquinas que no pueden permitirse un milímetro de error.
+              Diseño, parametrización y puesta en marcha de ejes, servos y sistemas de posicionamiento
+              integrados con tu lógica de máquina.
+            </p>
+            <div class="service-tags">
+              <span class="service-tag">Servo drives</span>
+              <span class="service-tag">Posicionamiento</span>
+              <span class="service-tag">Ejes sincronizados</span>
+              <span class="service-tag">Levas electrónicas</span>
+              <span class="service-tag">CNC</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automatización y Control -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </div>
+          <h3>Automatización y control</h3>
+          <p>Programamos, integramos y ponemos en marcha sistemas de control que funcionan el lunes a las 6 de la mañana, no solo en la demo del viernes.</p>
+          <div class="service-tags">
+            <span class="service-tag">PLC</span>
+            <span class="service-tag">HMI</span>
+            <span class="service-tag">DCS</span>
+            <span class="service-tag">Seguridad</span>
+          </div>
+        </div>
+
+        <!-- DESTACADO: SCADA e Informática Industrial -->
+        <div class="service-card featured no-image">
+          <div class="featured-content">
+            <span class="featured-badge">Desarrollo a medida</span>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+                <path d="M7 8l3 3-3 3M13 10h4"/>
+              </svg>
+            </div>
+            <h3>SCADA e informática industrial</h3>
+            <p>
+              Desarrollamos sistemas SCADA y aplicaciones de informática industrial a medida de tu proceso.
+              Nada de soluciones genéricas: cada proyecto se diseña para encajar con tu operativa,
+              tus datos y tu forma de trabajar.
+            </p>
+            <div class="service-tags">
+              <span class="service-tag">SCADA</span>
+              <span class="service-tag">WinCC</span>
+              <span class="service-tag">Vijeo</span>
+              <span class="service-tag">Desarrollo a medida</span>
+              <span class="service-tag">Bases de datos</span>
+              <span class="service-tag">Reporting</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digitalización e IIoT -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><circle cx="4" cy="20" r="1"/></svg>
+          </div>
+          <h3>Digitalización e IIoT</h3>
+          <p>Conectamos tus máquinas para que los datos salgan de planta, no se queden en un USB. Dashboards, OEE en tiempo real y trazabilidad sin humo.</p>
+          <div class="service-tags">
+            <span class="service-tag">IIoT</span>
+            <span class="service-tag">MES</span>
+            <span class="service-tag">OPC-UA</span>
+            <span class="service-tag">MQTT</span>
+          </div>
+        </div>
+
+        <!-- Ingeniería Eléctrica -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3>Ingeniería eléctrica</h3>
+          <p>Diseño y fabricación de cuadros eléctricos, esquemas y certificaciones. Todo lo que hay entre el interruptor y el motor, documentado y hecho bien.</p>
+          <div class="service-tags">
+            <span class="service-tag">Cuadros eléctricos</span>
+            <span class="service-tag">Seguridad</span>
+            <span class="service-tag">CE</span>
+          </div>
+        </div>
+
+        <!-- Robótica -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><path d="M2 12h2"/><path d="M20 12h2"/><rect x="6" y="8" width="12" height="12" rx="2"/><path d="M10 16h4"/></svg>
+          </div>
+          <h3>Robótica industrial</h3>
+          <p>Integramos robots en líneas existentes. No vendemos robots: los hacemos producir dentro de tu proceso, coordinados con el resto de la máquina.</p>
+          <div class="service-tags">
+            <span class="service-tag">Pick & place</span>
+            <span class="service-tag">Paletizado</span>
+            <span class="service-tag">Integración</span>
+          </div>
+        </div>
+
+        <!-- Soporte y Retrofit -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Soporte, retrofit y mantenimiento</h3>
+          <p>¿Máquina de los 90 que nadie quiere tocar? Nosotros sí. Retrofit, soporte técnico continuo y mantenimiento para que tu inversión siga rindiendo.</p>
+          <div class="service-tags">
+            <span class="service-tag">Retrofit</span>
+            <span class="service-tag">Puesta en marcha</span>
+            <span class="service-tag">Soporte 24/7</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       DIFERENCIAL
+  ====================================================================== -->
+  <section class="why-us" id="diferencial">
+    <div class="container">
+      <div class="why-us-layout">
+        <div class="why-us-left reveal">
+          <div class="section-label">Por qué ENSO</div>
+          <h2 class="section-title">Cuando necesitas intervenir,<br>estamos en campo.</h2>
+          <p>
+            Nuestro equipo está preparado para actuar donde importa: en tu planta.
+            Disponibilidad real, tiempos de respuesta cortos y la capacidad técnica
+            para resolver sobre el terreno, sin depender de terceros.
+          </p>
+          <div class="why-us-quote">
+            "Llamamos y al día siguiente están aquí."
+            — Así nos valoran nuestros clientes.
+          </div>
+        </div>
+
+        <div class="why-us-grid reveal-stagger">
+          <div class="why-us-item">
+            <div class="why-us-number">01</div>
+            <div>
+              <h4>Intervención directa en campo</h4>
+              <p>Cuando hay un problema, estamos en tu planta. Diagnóstico, programación y puesta a punto in situ, con las herramientas encima.</p>
+            </div>
+          </div>
+          <div class="why-us-item">
+            <div class="why-us-number">02</div>
+            <div>
+              <h4>+25 años en planta</h4>
+              <p>No improvisamos. Hemos visto de todo: desde S5 y S7-200 hasta las últimas plataformas. Esa experiencia marca la diferencia cuando hay que tomar decisiones rápido.</p>
+            </div>
+          </div>
+          <div class="why-us-item">
+            <div class="why-us-number">03</div>
+            <div>
+              <h4>Rapidez cuando importa</h4>
+              <p>Tu línea parada es dinero perdido. Nuestro tiempo de respuesta está pensado para la realidad industrial, no para el horario de oficina.</p>
+            </div>
+          </div>
+          <div class="why-us-item">
+            <div class="why-us-number">04</div>
+            <div>
+              <h4>De la A a la Z</h4>
+              <p>Diseño, fabricación, programación, puesta en marcha y soporte. Un solo equipo, sin subcontratas que no conocen tu máquina.</p>
+            </div>
+          </div>
+          <div class="why-us-item">
+            <div class="why-us-number">05</div>
+            <div>
+              <h4>Pensamos en tu futuro</h4>
+              <p>Cada proyecto se diseña para escalar. Hoy automatizamos tu línea; mañana la conectamos a tu ERP. Sin rehacer nada.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PARTNERS / TECNOLOGÍA
+  ====================================================================== -->
+  <section class="partners" id="tecnologia">
+    <div class="container">
+      <div class="partners-header reveal">
+        <div class="section-label">Ecosistema tecnológico</div>
+        <h2 class="section-title">Siemens y Schneider.<br>Desde las primeras generaciones.</h2>
+        <p class="section-subtitle">
+          Más de 25 años trabajando con estas plataformas. Desde equipos legacy
+          hasta las últimas generaciones. Los conocemos por dentro.
+        </p>
+      </div>
+
+      <div class="partners-grid reveal-stagger">
+        <div class="partner-card">
+          <div class="partner-card-header">
+            <div class="partner-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div>
+              <div class="partner-name">Siemens</div>
+              <div class="partner-subtitle">Expertise integral</div>
+            </div>
+          </div>
+          <p class="partner-desc">Dominamos todo el ecosistema Siemens, desde los clásicos S5 y STEP 7 hasta TIA Portal con S7-1500. Si tu máquina tiene Siemens, hablamos su idioma.</p>
+          <div class="partner-techs">
+            <span class="partner-tech">TIA Portal</span>
+            <span class="partner-tech">STEP 7</span>
+            <span class="partner-tech">S7-1500</span>
+            <span class="partner-tech">S7-300</span>
+            <span class="partner-tech">S7-200</span>
+            <span class="partner-tech">S5</span>
+            <span class="partner-tech">WinCC</span>
+            <span class="partner-tech">SINAMICS</span>
+            <span class="partner-tech">SIMOTION</span>
+          </div>
+        </div>
+
+        <div class="partner-card">
+          <div class="partner-card-header">
+            <div class="partner-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10M7 12h10M7 17h6"/></svg>
+            </div>
+            <div>
+              <div class="partner-name">Schneider Electric</div>
+              <div class="partner-subtitle">Partner certificado</div>
+            </div>
+          </div>
+          <p class="partner-desc">Integradores con experiencia real en las plataformas Schneider. Desde Modicon clásicos hasta las soluciones EcoStruxure más actuales.</p>
+          <div class="partner-techs">
+            <span class="partner-tech">EcoStruxure</span>
+            <span class="partner-tech">Modicon M340</span>
+            <span class="partner-tech">Modicon M580</span>
+            <span class="partner-tech">Unity Pro</span>
+            <span class="partner-tech">Vijeo Designer</span>
+            <span class="partner-tech">Lexium</span>
+            <span class="partner-tech">Altivar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SOBRE NOSOTROS — con imagen de equipo
+  ====================================================================== -->
+  <section class="about" id="nosotros">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-text reveal">
+          <div class="section-label">Sobre nosotros</div>
+          <h2 class="section-title">ENSO es la división de automatización de Denetic.</h2>
+          <p>
+            Nacimos de una necesidad real: la industria necesita ingenieros que entiendan
+            tanto el código del PLC como el ritmo de producción de una planta.
+            No ingeniería de despacho. <strong>Ingeniería de planta.</strong>
+          </p>
+          <p>
+            Con sede central en Rubí (Barcelona) y presencia en Tarragona y zona centro (Illescas),
+            damos cobertura a proyectos en toda la Península. Más de 25 años resolviendo
+            problemas reales en entornos industriales exigentes.
+          </p>
+          <p>
+            Nuestro equipo combina veteranos con décadas en automatización industrial
+            — que han trabajado con S5, STEP 7 y todo lo que vino después — y
+            perfiles jóvenes que dominan las nuevas tecnologías de digitalización e IIoT.
+            <strong>Lo mejor de los dos mundos.</strong>
+          </p>
+        </div>
+
+        <div class="about-visual reveal">
+          <!-- Imagen del equipo / planta -->
+          <div class="about-image">
+            <img src="img/hero-engineer.jpg" alt="Equipo de ingenieros trabajando en planta industrial" loading="lazy">
+          </div>
+          <!-- Valores en grid compacto -->
+          <div class="about-values-grid">
+            <div class="about-value">
+              <div class="about-value-icon">⚡</div>
+              <div>
+                <h4>Agilidad real</h4>
+                <p>Decisiones rápidas, sin burocracia.</p>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">🔧</div>
+              <div>
+                <h4>Enfoque práctico</h4>
+                <p>Resultados en planta, no en papel.</p>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">🤝</div>
+              <div>
+                <h4>Compromiso técnico</h4>
+                <p>Soporte continuo tras la puesta en marcha.</p>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">🎯</div>
+              <div>
+                <h4>Multisector</h4>
+                <p>Alimentación, farmacia, automoción...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       TALENTO — con imagen lateral
+  ====================================================================== -->
+  <section class="talent" id="talento">
+    <div class="container">
+      <div class="talent-banner talent-banner--simple reveal">
+        <div class="talent-content">
+          <h3>¿Eres ingeniero y quieres proyectos de verdad?</h3>
+          <p>
+            Buscamos personas que prefieran resolver problemas en planta a hacer
+            presentaciones. Si te gusta la automatización, el motion control o el IIoT
+            y quieres crecer técnicamente, hablemos.
+          </p>
+          <a href="mailto:denetic@denetic.net?subject=Candidatura%20ENSO" class="btn btn-secondary">
+            Envíanos tu perfil
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       CONTACTO
+  ====================================================================== -->
+  <section class="contact" id="contacto">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-info reveal">
+          <div class="section-label">Contacto</div>
+          <h2 class="section-title">Cuéntanos tu reto.<br>Te decimos cómo lo resolvemos.</h2>
+          <p>Sin compromisos, sin formularios infinitos. Cuéntanos qué necesitas y un ingeniero de nuestro equipo te responderá en menos de 24h.</p>
+
+          <div class="contact-methods">
+            <a href="mailto:denetic@denetic.net" class="contact-method">
+              <div class="contact-method-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+              </div>
+              <div>
+                <div class="contact-method-label">Email</div>
+                <span class="contact-method-text">denetic@denetic.net</span>
+              </div>
+            </a>
+            <a href="tel:+34931126942" class="contact-method">
+              <div class="contact-method-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.89.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.92.34 2 .57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <div class="contact-method-label">Teléfono</div>
+                <span class="contact-method-text">+34 931 126 942</span>
+              </div>
+            </a>
+            <div class="contact-method">
+              <div class="contact-method-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-method-label">Central — Rubí (Barcelona)</div>
+                <span class="contact-method-text">Avda. Can Sucarrats, Pol. Ind. Cova Solera, 08191 Rubí</span>
+              </div>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-method-label">Tarragona</div>
+                <span class="contact-method-text">Avda. Països Catalans 15, 43007 Tarragona</span>
+              </div>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-method-label">Zona Centro — Illescas (Toledo)</div>
+                <span class="contact-method-text">C/ García Lorca 62, 45200 Illescas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrapper reveal">
+          <h3>Escríbenos directamente</h3>
+          <p>Te respondemos en menos de 24 horas laborables.</p>
+          <form id="contactForm" action="#" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Nombre *</label>
+                <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+              </div>
+              <div class="form-group">
+                <label for="company">Empresa</label>
+                <input type="text" id="company" name="company" placeholder="Tu empresa">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" placeholder="tu@empresa.com" required>
+            </div>
+            <div class="form-group">
+              <label for="project-type">¿En qué podemos ayudarte?</label>
+              <select id="project-type" name="project-type">
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="motion">Motion Control</option>
+                <option value="automatizacion">Automatización / PLC / SCADA</option>
+                <option value="robotica">Robótica industrial</option>
+                <option value="digitalizacion">Digitalización / IIoT</option>
+                <option value="electrica">Ingeniería eléctrica / Cuadros</option>
+                <option value="retrofit">Retrofit / Modernización</option>
+                <option value="soporte">Soporte técnico / Mantenimiento</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Cuéntanos tu reto *</label>
+              <textarea id="message" name="message" placeholder="Describe brevemente qué necesitas: tipo de máquina, problema, plazo..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">
+              Enviar mensaje
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">
+        <img src="logo-denetic.png" alt="Denetic" loading="lazy">
+      </div>
+      <p class="footer-copy">&copy; 2026 Denetic ENSO. Todos los derechos reservados.</p>
+      <ul class="footer-links">
+        <li><a href="#">Aviso legal</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
+
+    const WEBHOOK_URL = 'https://flow.zoho.eu/20105129434/flow/webhook/incoming?zapikey=1001.0e839562129099cc9a20a302d88553ee.43bf843029f16e3a5d1c3f9cb5513ffb&isdebug=false';
+
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = contactForm.querySelector('.form-submit');
+      const originalHTML = btn.innerHTML;
+
+      // Feedback inmediato: estado "enviando"
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Enviando...';
+      btn.disabled = true;
+
+      // Construir datos como form-urlencoded (NO JSON — Zoho Flow requiere este formato)
+      const formData = new URLSearchParams();
+      formData.append('nombre', contactForm.name.value);
+      formData.append('empresa', contactForm.company.value);
+      formData.append('email', contactForm.email.value);
+      formData.append('tipo_proyecto', contactForm['project-type'].value);
+      formData.append('mensaje', contactForm.message.value);
+      formData.append('origen', 'Web Denetic ENSO');
+      formData.append('fecha', new Date().toLocaleString('es-ES'));
+
+      // Enviar al webhook de Zoho Flow (no-cors para evitar bloqueo CORS)
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString()
+      }).then(() => {
+        // Con no-cors la respuesta es opaque, pero el envío se ha hecho
+        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> ¡Mensaje enviado!';
+        btn.style.background = '#3CB371';
+        contactForm.reset();
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 4000);
+      }).catch(() => {
+        btn.innerHTML = 'Error al enviar. Inténtalo de nuevo.';
+        btn.style.background = '#dc3545';
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      });
+    });
+
+    const sections = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.navbar-links a[href^="#"]');
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 200;
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+        if (scrollPos >= top && scrollPos < top + height) {
+          navAnchors.forEach(a => {
+            a.style.color = '';
+            if (a.getAttribute('href') === `#${id}`) a.style.color = 'var(--blue)';
+          });
+        }
+      });
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
