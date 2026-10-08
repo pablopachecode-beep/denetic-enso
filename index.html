@@ -923,6 +923,44 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-submit { width: 100%; justify-content: center; margin-top: 0.5rem; }
 
+    .form-group.has-error input,
+    .form-group.has-error textarea,
+    .form-group.has-error select {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+    .field-error {
+      display: block;
+      font-size: 0.75rem;
+      color: #e53e3e;
+      margin-top: 0.35rem;
+      min-height: 1.1em;
+    }
+    .captcha-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.25rem;
+      transition: border-color 0.2s ease;
+    }
+    .captcha-row.has-error { border-color: #e53e3e; }
+    .captcha-row input[type="checkbox"] {
+      width: 20px; height: 20px;
+      accent-color: var(--green);
+      cursor: pointer; flex-shrink: 0;
+    }
+    .captcha-row label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin: 0; font-weight: 400;
+    }
+    .captcha-error { font-size: 0.75rem; color: #e53e3e; margin-top: 0.2rem; }
+
     /* ==========================================================================
        FOOTER
     ========================================================================== */
@@ -1581,23 +1619,28 @@
         <div class="contact-form-wrapper reveal">
           <h3>Escríbenos directamente</h3>
           <p>Te respondemos en menos de 24 horas laborables.</p>
-          <form id="contactForm" action="#" method="POST">
+          <form id="contactForm" action="#" method="POST" novalidate>
+            <!-- Honeypot: campo invisible para bots, los humanos lo dejan vacío -->
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Nombre *</label>
-                <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                <input type="text" id="name" name="name" placeholder="Tu nombre" autocomplete="name">
+                <span class="field-error" id="err-name"></span>
               </div>
               <div class="form-group">
                 <label for="company">Empresa</label>
-                <input type="text" id="company" name="company" placeholder="Tu empresa">
+                <input type="text" id="company" name="company" placeholder="Tu empresa" autocomplete="organization">
               </div>
             </div>
             <div class="form-group">
               <label for="email">Email *</label>
-              <input type="email" id="email" name="email" placeholder="tu@empresa.com" required>
+              <input type="email" id="email" name="email" placeholder="tu@empresa.com" autocomplete="email">
+              <span class="field-error" id="err-email"></span>
             </div>
             <div class="form-group">
-              <label for="project-type">¿En qué podemos ayudarte?</label>
+              <label for="project-type">¿En qué podemos ayudarte? *</label>
               <select id="project-type" name="project-type">
                 <option value="" disabled selected>Selecciona una opción</option>
                 <option value="motion">Motion Control</option>
@@ -1609,11 +1652,21 @@
                 <option value="soporte">Soporte técnico / Mantenimiento</option>
                 <option value="otro">Otro</option>
               </select>
+              <span class="field-error" id="err-type"></span>
             </div>
             <div class="form-group">
               <label for="message">Cuéntanos tu reto *</label>
-              <textarea id="message" name="message" placeholder="Describe brevemente qué necesitas: tipo de máquina, problema, plazo..." required></textarea>
+              <textarea id="message" name="message" placeholder="Describe brevemente qué necesitas: tipo de máquina, problema, plazo..."></textarea>
+              <span class="field-error" id="err-message"></span>
             </div>
+
+            <!-- Captcha visual: checkbox humano -->
+            <div class="captcha-row" id="captchaRow">
+              <input type="checkbox" id="humanCheck" name="humanCheck">
+              <label for="humanCheck">No soy un robot</label>
+            </div>
+            <span class="captcha-error" id="err-captcha"></span>
+
             <button type="submit" class="btn btn-primary form-submit">
               Enviar mensaje
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -1672,51 +1725,150 @@
     document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
 
     const WEBHOOK_URL = 'https://flow.zoho.eu/20105129434/flow/webhook/incoming?zapikey=1001.0e839562129099cc9a20a302d88553ee.43bf843029f16e3a5d1c3f9cb5513ffb&isdebug=false';
+    // Web3Forms: servicio gratuito para recibir email con cada envío.
+    // Pasos: entra en https://web3forms.com → pon tu email → te envían una clave gratis.
+    // Luego sustituye 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' por esa clave.
+    const WEB3FORMS_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX';
+    const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+
+    const formLoadTime = Date.now();
 
     const contactForm = document.getElementById('contactForm');
+
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = msg;
+    }
+    function clearError(id) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '';
+    }
+    function setGroupError(input, hasError) {
+      const group = input.closest('.form-group');
+      if (group) group.classList.toggle('has-error', hasError);
+    }
+
+    // Limpiar error al escribir
+    ['name','email','project-type','message'].forEach(field => {
+      const el = contactForm.elements[field];
+      if (!el) return;
+      el.addEventListener('input', () => {
+        setGroupError(el, false);
+        clearError('err-' + (field === 'project-type' ? 'type' : field));
+      });
+      el.addEventListener('change', () => {
+        setGroupError(el, false);
+        clearError('err-' + (field === 'project-type' ? 'type' : field));
+      });
+    });
+    document.getElementById('humanCheck').addEventListener('change', () => {
+      document.getElementById('captchaRow').classList.remove('has-error');
+      clearError('err-captcha');
+    });
+
+    function validateForm() {
+      let ok = true;
+      const nameEl = contactForm.elements['name'];
+      const emailEl = contactForm.elements['email'];
+      const typeEl = contactForm.elements['project-type'];
+      const msgEl = contactForm.elements['message'];
+
+      if (!nameEl.value.trim() || nameEl.value.trim().length < 2) {
+        setGroupError(nameEl, true);
+        showError('err-name', 'Introduce tu nombre (mínimo 2 caracteres).');
+        ok = false;
+      }
+      if (!emailEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+        setGroupError(emailEl, true);
+        showError('err-email', 'Introduce un email válido.');
+        ok = false;
+      }
+      if (!typeEl.value) {
+        setGroupError(typeEl, true);
+        showError('err-type', 'Selecciona en qué podemos ayudarte.');
+        ok = false;
+      }
+      if (!msgEl.value.trim() || msgEl.value.trim().length < 20) {
+        setGroupError(msgEl, true);
+        showError('err-message', 'Cuéntanos tu reto (mínimo 20 caracteres).');
+        ok = false;
+      }
+      if (!document.getElementById('humanCheck').checked) {
+        document.getElementById('captchaRow').classList.add('has-error');
+        showError('err-captcha', 'Confirma que no eres un robot.');
+        ok = false;
+      }
+      return ok;
+    }
+
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // Anti-bot: campo honeypot
+      if (contactForm.elements['_honey'].value) return;
+      // Anti-bot: tiempo mínimo de 4 segundos en la página
+      if (Date.now() - formLoadTime < 4000) return;
+
+      if (!validateForm()) return;
+
       const btn = contactForm.querySelector('.form-submit');
       const originalHTML = btn.innerHTML;
-
-      // Feedback inmediato: estado "enviando"
       btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Enviando...';
       btn.disabled = true;
 
-      // Construir datos como form-urlencoded (NO JSON — Zoho Flow requiere este formato)
-      const formData = new URLSearchParams();
-      formData.append('nombre', contactForm.name.value);
-      formData.append('empresa', contactForm.company.value);
-      formData.append('email', contactForm.email.value);
-      formData.append('tipo_proyecto', contactForm['project-type'].value);
-      formData.append('mensaje', contactForm.message.value);
-      formData.append('origen', 'Web Denetic ENSO');
-      formData.append('fecha', new Date().toLocaleString('es-ES'));
+      const nombre = contactForm.elements['name'].value.trim();
+      const empresa = contactForm.elements['company'].value.trim();
+      const email = contactForm.elements['email'].value.trim();
+      const tipo = contactForm.elements['project-type'].value;
+      const mensaje = contactForm.elements['message'].value.trim();
+      const fecha = new Date().toLocaleString('es-ES');
 
-      // Enviar al webhook de Zoho Flow (no-cors para evitar bloqueo CORS)
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+      // Envío 1: Zoho Flow (Cliq)
+      const zohoData = new URLSearchParams();
+      zohoData.append('nombre', nombre);
+      zohoData.append('empresa', empresa);
+      zohoData.append('email', email);
+      zohoData.append('tipo_proyecto', tipo);
+      zohoData.append('mensaje', mensaje);
+      zohoData.append('origen', 'Web Denetic ENSO');
+      zohoData.append('fecha', fecha);
+
+      const zohoFetch = fetch(WEBHOOK_URL, {
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString()
-      }).then(() => {
-        // Con no-cors la respuesta es opaque, pero el envío se ha hecho
+        body: zohoData.toString()
+      });
+
+      // Envío 2: Web3Forms (email) — activo solo cuando se configure la clave
+      let emailFetch = Promise.resolve();
+      if (WEB3FORMS_KEY !== 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX') {
+        const w3fData = new URLSearchParams();
+        w3fData.append('access_key', WEB3FORMS_KEY);
+        w3fData.append('subject', 'Nuevo contacto desde Denetic ENSO — ' + nombre);
+        w3fData.append('from_name', 'Web Denetic ENSO');
+        w3fData.append('name', nombre);
+        w3fData.append('email', email);
+        w3fData.append('company', empresa);
+        w3fData.append('tipo_proyecto', tipo);
+        w3fData.append('message', mensaje);
+        w3fData.append('fecha', fecha);
+        emailFetch = fetch(WEB3FORMS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: w3fData.toString()
+        });
+      }
+
+      Promise.all([zohoFetch, emailFetch]).then(() => {
         btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> ¡Mensaje enviado!';
         btn.style.background = '#3CB371';
         contactForm.reset();
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-          btn.style.background = '';
-          btn.disabled = false;
-        }, 4000);
+        document.getElementById('captchaRow').classList.remove('has-error');
+        setTimeout(() => { btn.innerHTML = originalHTML; btn.style.background = ''; btn.disabled = false; }, 4000);
       }).catch(() => {
         btn.innerHTML = 'Error al enviar. Inténtalo de nuevo.';
         btn.style.background = '#dc3545';
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-          btn.style.background = '';
-          btn.disabled = false;
-        }, 3000);
+        setTimeout(() => { btn.innerHTML = originalHTML; btn.style.background = ''; btn.disabled = false; }, 3000);
       });
     });
 
